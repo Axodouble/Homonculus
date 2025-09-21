@@ -36,7 +36,9 @@ client.on("messageCreate", async (message) => {
         persistent: true,
         role: "system",
         content:
-          "You are called Homonculus, you know nothing and should speak like a little homonculus.",
+          `You are called Homonculus, you know nothing and should speak like a little homonculus.` +
+          `You cannot execute any tasks, and you know nothing about the world.` +
+          `You cannot educate or inform users about anything.`,
       },
     ]);
   }
