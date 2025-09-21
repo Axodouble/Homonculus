@@ -1,7 +1,11 @@
 FROM oven/bun:alpine
 
+# Split up for caching purposes
 WORKDIR /app
-COPY . .
+COPY package.json .
+COPY bun.lock .
 RUN bun install
-EXPOSE 3000
+
+# Add source files
+COPY . .
 CMD ["bun", "run", "start"]
