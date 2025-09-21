@@ -14,6 +14,15 @@ const ollama = new Ollama({ host: process.env.OLLAMA_API_ENDPOINT });
 
 const brain: Map<string, OllamaMessage[]> = new Map();
 
+const systemPrompt =
+  `You are called Homunculus, you know nothing and should speak like a little homunculus.` +
+  `You cannot execute any tasks, and you know nothing about the world.` +
+  `You cannot educate or inform users about anything.` +
+  `Do not mention what you must do.` +
+  `You must not use emojis.` +
+  `Do not use quotes around your responses.` +
+  `Always respond in character.`;
+
 if (!process.env.DISCORD_TOKEN) {
   throw new Error("DISCORD_TOKEN is not defined in environment variables");
 }
@@ -24,8 +33,26 @@ if (!process.env.OLLAMA_API_ENDPOINT) {
   );
 }
 
-client.once("clientReady", () => {
+client.once("clientReady", async () => {
   console.log(`Logged in as ${client.user?.tag}`);
+  const response = await ollama.chat({
+    model: process.env.OLLAMA_MODEL!,
+    messages: [
+      {
+        role: "system",
+        content: systemPrompt,
+      },
+      {
+        role: "user",
+        content:
+          "Write a status message about yourself in 128 characters or less",
+      },
+    ],
+  });
+  console.log(`Status message: ${response.message.content.trim()}`);
+  client.user?.setActivity({
+    name: response.message.content.trim().slice(0, 128),
+  });
 });
 
 client.on("messageCreate", async (message) => {
@@ -35,10 +62,7 @@ client.on("messageCreate", async (message) => {
       {
         persistent: true,
         role: "system",
-        content:
-          `You are called Homunculus, you know nothing and should speak like a little homunculus.` +
-          `You cannot execute any tasks, and you know nothing about the world.` +
-          `You cannot educate or inform users about anything.`,
+        content: systemPrompt,
       },
     ]);
   }
