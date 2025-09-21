@@ -1,12 +1,18 @@
 {
   "name": "homonculus",
-  "module": "index.ts",
+  "module": "src/index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "start": "bun src/index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "ollama": "^0.5.18"
   }
 }
