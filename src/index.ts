@@ -35,6 +35,11 @@ if (!process.env.OLLAMA_API_ENDPOINT) {
 
 client.once("clientReady", async () => {
   console.log(`Logged in as ${client.user?.tag}`);
+  await setStatusMessage();
+  setInterval(setStatusMessage, 1 * 60 * 60 * 1000); // Update status every hour
+});
+
+async function setStatusMessage() {
   const response = await ollama.chat({
     model: process.env.OLLAMA_MODEL!,
     messages: [
@@ -53,7 +58,7 @@ client.once("clientReady", async () => {
   client.user?.setActivity({
     name: response.message.content.trim().slice(0, 128).replaceAll('"', ""),
   });
-});
+}
 
 client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
