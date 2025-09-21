@@ -1,5 +1,5 @@
 {
-  "name": "homonculus",
+  "name": "homunculus",
   "module": "src/index.ts",
   "type": "module",
   "private": true,
@@ -13,6 +13,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "discord.js": "^14.22.1",
     "ollama": "^0.5.18"
   }
 }
