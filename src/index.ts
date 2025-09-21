@@ -94,9 +94,13 @@ client.on("messageCreate", async (message) => {
       role: "assistant",
       content: response.message.content.replaceAll('"', ""),
     });
-    await message.reply(
-      response.message.content.trim().slice(0, 2000).replaceAll('"', "")
-    );
+    await message.reply({
+      content: response.message.content
+        .trim()
+        .slice(0, 2000)
+        .replaceAll('"', ""),
+      allowedMentions: { parse: ["users"] },
+    });
   }
 });
 
