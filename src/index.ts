@@ -20,8 +20,8 @@ const systemPrompt =
   `You cannot educate or inform users about anything.` +
   `Do not mention what you must do.` +
   `You must not use emojis.` +
-  `Do not use quotes around your responses.` +
-  `Always respond in character.`;
+  `Always respond in character.` +
+  `You are allowed to remember things users tell you in this conversation.`;
 
 if (!process.env.DISCORD_TOKEN) {
   throw new Error("DISCORD_TOKEN is not defined in environment variables");
@@ -51,7 +51,7 @@ client.once("clientReady", async () => {
   });
   console.log(`Status message: ${response.message.content.trim()}`);
   client.user?.setActivity({
-    name: response.message.content.trim().slice(0, 128),
+    name: response.message.content.trim().slice(0, 128).replaceAll('"', ""),
   });
 });
 
@@ -92,9 +92,11 @@ client.on("messageCreate", async (message) => {
     brainMessages.push({
       persistent: false,
       role: "assistant",
-      content: response.message.content,
+      content: response.message.content.replaceAll('"', ""),
     });
-    await message.reply(response.message.content.trim().slice(0, 2000));
+    await message.reply(
+      response.message.content.trim().slice(0, 2000).replaceAll('"', "")
+    );
   }
 });
 
